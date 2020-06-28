@@ -1,85 +1,27 @@
-<p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
+# Issue Tracker | Ticketing System
+NMS © 2020
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+An issue tracking system (also ITS, trouble ticket system, support ticket, request management or incident ticket system) is a computer software package that manages and maintains lists of issues.[1] Issue tracking systems are generally used in collaborative settings—especially in large or distributed collaborations—but can also be employed by individuals as part of a time management or personal productivity regime. These systems often encompass resource allocation, time accounting, priority management, and oversight workflow in addition to implementing a centralized issue registry.
 
-## About Laravel
+In the institutional setting, issue tracking systems are commonly used in an organization's customer support call center to create, update, and resolve reported customer issues, or even issues reported by that organization's other employees. A support ticket should include vital information for the account involved and the issue encountered. An issue tracking system often also contains a knowledge base containing information on each customer, resolutions to common problems, and other such data.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+An issue tracking system is similar to a "bugtracker", and often, a software company will sell both, and some bugtrackers are capable of being used as an issue tracking system, and vice versa. Consistent use of an issue or bug tracking system is considered one of the "hallmarks of a good software team".[2] A ticket element, within an issue tracking system, is a running report on a particular problem, its status, and other relevant data. They are commonly created in a help desk or call center environment and almost always have a unique reference number, also known as a case, issue or call log number which is used to allow the user or help staff to quickly locate, add to or communicate the status of the user's issue or request.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+These tickets are called so because of their origin as small cards within a traditional wall mounted work planning system when this kind of support started. Operators or staff receiving a call or query from a user would fill out a small card with the user's details and a brief summary of the request and place it into a position (usually the last) in a column of pending slots for an appropriate engineer, so determining the staff member who would deal with the query and the priority of the request.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+The shared conceptual foundation between issue tracking systems and bugtrackers is that a valid issue must be amenable to a decisive resolution (such as "completed", "fixed", or a group consensus that the issue is not worth solving, such as "not a problem" or "won't fix"); that each issue is unique (duplicate problem reports are in most cases promptly amalgamated into a single active issue or ticket); and—beyond the screening stage—that there is precisely one person assigned formal responsibility to move the issue forward (this formal baton will often bounce around many times as the issue evolves). In bug trackers, issues are generally quality or feature related with respect to a codebase (which is inherently a project management setting) whereas in generalized issue tracking systems, the tickets are often service-related or relationship-based, with closer ties to customer relationship management (CRM) concerns. Unlike old-school user guides, this doc is yours to tailor exactly for your needs. Reading it will teach you some basics about Word, but this document isn’t just for reading. It’s for editing too, so you can learn by doing.
 
-## Learning Laravel
+## Similar Systems
+- Redmine
+- Trac
+- BugZilla
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-
-### Community Sponsors
-
-<a href="https://op.gg"><img src="http://opgg-static.akamaized.net/icon/t.rectangle.png" width="150"></a>
-
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
-- [Hyper Host](https://hyper.host)
-- [Appoly](https://www.appoly.co.uk)
-- [云软科技](http://www.yunruan.ltd/)
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Technology
+- PHP (required)
+- MariaDB (required)
+- Google OAuth (required)
+- Google Recaptcha (required)
+- Laravel latest (required)
+- Javascript
+- Boostrap
+- Use pre-built web-template (recommended)
