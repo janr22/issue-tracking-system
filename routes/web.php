@@ -13,6 +13,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::view('/', 'pages.home')->name('home');
+
+Route::group(['middleware' => 'guest'], function () {
+    Route::get('login/google', 'Auth\LoginController@redirectToProvider');
+    Route::get('login/google/callback', 'Auth\LoginController@handleProviderCallback');
+});
+
+
+Route::group(['middleware' => 'auth'], function () {
+    Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 });
