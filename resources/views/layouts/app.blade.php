@@ -14,7 +14,7 @@
 
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md navbar-light bg-white sticky-top border-bottom">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     Ticket
@@ -22,25 +22,23 @@
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
                     </ul>
                     <ul class="navbar-nav ml-auto">
                         @guest
                         <li class="nav-item">
-                            <a class="nav-link" href="/login/google">Sign in with Google</a>
+                            <a class="py-1 nav-link" href="/login/google">Sign in with Google</a>
                         </li>
                         @else
                         <li class="nav-item dropdown">
-
-                            <a id="navbarDropdown" class="py-0 nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                <img class="mx-1 rounded-circle" src="{{ Auth::user()->avatar }}" height="30px" width="30px" />
-                                {{ Auth::user()->name }}
+                            <a id="navbarDropdown" class="py-1 nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                <img class="rounded-circle" src="{{ Auth::user()->avatar }}" height="30px" width="30px" />
                                 <span class="caret"></span>
                             </a>
-
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                <h2 class="dropdown-header">{{ Auth::user()->name }}</h2>
+                                <a class="dropdown-item" href="{{ url('/users') }}">Manage Users</a>
                                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                     {{ __('Logout') }}
@@ -55,8 +53,7 @@
                 </div>
             </div>
         </nav>
-
-        <main class="py-4">
+        <main class="py-3">
             @yield('content')
         </main>
     </div>

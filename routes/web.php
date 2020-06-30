@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'pages.home')->name('home');
 
+Route::view('/create', 'pages.create')->name('create');
+Route::view('/users', 'pages.users')->name('create');
+
 Route::group(['middleware' => 'guest'], function () {
     Route::get('login/google', 'Auth\LoginController@redirectToProvider');
     Route::get('login/google/callback', 'Auth\LoginController@handleProviderCallback');

@@ -32,7 +32,7 @@ class LoginController extends Controller
             Auth::login($user, false);
             return redirect('/');
         }else{
-            return redirect('/');
+            return redirect('/')->with('message', 'Login Failed');
         }
     }
 }
