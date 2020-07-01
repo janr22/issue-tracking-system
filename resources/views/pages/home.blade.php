@@ -2,6 +2,7 @@
 
 @section('content')
 <div class="container">
+
     <div class="row justify-content-center">
         <div class="col-md-10">
             <a href="{{ url('/create') }}" role="button" class="mb-2 btn btn-outline-secondary">New Ticket</a>
@@ -19,16 +20,18 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @foreach($tickets as $ticket)
                     <tr>
-                        <th scope="row">1</th>
-                        <td>Loop IM</td>
-                        <td>Feature</td>
-                        <td>In Progress</td>
-                        <td>Normal</td>
-                        <td>Personas Page</td>
-                        <td>Caryl Joy Bumanghat</td>
-                        <td>date</td>
+                        <th><a href="{{ url('/' . $ticket->id) }}">{{ $ticket->id }}</a></th>
+                        <td><a href="{{ url('/' . $ticket->id) }}">{{ $ticket->project }}</a></td>
+                        <td>{{ $ticket->tracker}}</td>
+                        <td>{{ $ticket->status }}</td>
+                        <td>{{ $ticket->priority  }}</td>
+                        <td><a href="{{ url('/' . $ticket->id) }}">{{ $ticket->subject}}</a></td>
+                        <td>{{ $ticket->name}}</td>
+                        <td>{{ $ticket->updated_at}}</td>
                     </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>

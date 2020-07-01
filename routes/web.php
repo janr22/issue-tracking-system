@@ -13,17 +13,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::view('/', 'pages.home')->name('home');
 
-Route::view('/create', 'pages.create')->name('create');
-Route::view('/users', 'pages.users')->name('create');
+Route::get('/', 'TicketController@index')->name('home');
+Route::resource('/', 'TicketController');
+Route::get('/create', 'TicketController@create');
+Route::get('/{id}', 'TicketController@show');
 
 Route::group(['middleware' => 'guest'], function () {
     Route::get('login/google', 'Auth\LoginController@redirectToProvider');
     Route::get('login/google/callback', 'Auth\LoginController@handleProviderCallback');
 });
 
-
 Route::group(['middleware' => 'auth'], function () {
     Route::post('logout', 'Auth\LoginController@logout')->name('logout');
+});
+
+Route::group(['middleware' => 'admin'], function () {
+    Route::view('/users', 'pages.users')->name('create');
 });

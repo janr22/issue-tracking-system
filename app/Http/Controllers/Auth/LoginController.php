@@ -31,8 +31,8 @@ class LoginController extends Controller
         if (Auth::attempt(['password' => 'password', 'status' => 0])) {
             Auth::login($user, false);
             return redirect('/');
-        }else{
-            return redirect('/')->with('message', 'Login Failed');
+        } else {
+            return redirect()->route('home')->with('status', 'Your account has been deactivated.');
         }
     }
 }

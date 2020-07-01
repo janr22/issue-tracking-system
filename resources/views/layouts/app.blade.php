@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Laravel') }}</title>
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/app.js') }}"></script>
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -54,9 +54,27 @@
             </div>
         </nav>
         <main class="py-3">
+            @if (session('status'))
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="alert alert-danger">
+                        {{ session('status') }}
+                    </div>
+                </div>
+            </div>
+            @endif
             @yield('content')
         </main>
     </div>
 </body>
+<script type="text/javascript">
+    $(document).ready(function() {
+        // show the alert
+        setTimeout(function() {
+            $(".alert").alert('close');
+        }, 3000);
+        $('.toast').toast('show');
+    });
+</script>
 
 </html>
