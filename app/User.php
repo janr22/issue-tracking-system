@@ -41,9 +41,8 @@ class User extends Authenticatable
     {
         return $this->role == $roleName;
     }
-
     public function tickets()
     {
-        return $this->hasMany('App\Ticket');
+        return $this->belongsToMany(Ticket::class, 'tickets_users');
     }
 }

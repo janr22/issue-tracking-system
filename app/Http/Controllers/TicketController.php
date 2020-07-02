@@ -18,8 +18,9 @@ class TicketController extends Controller
 
     public function index()
     {
-        $tickets = DB::table('users')
-            ->rightjoin('tickets', 'users.id', '=', 'tickets.user_id')
+        $tickets = DB::table('tickets')->distinct()
+            ->leftjoin('tickets_users', 'tickets.id', '=', 'tickets_users.ticket_id')
+            ->leftjoin('users', 'users.id', '=', 'tickets_users.user_id')
             ->select('tickets.*', 'users.name')
             ->get();
         return view('pages.home', compact('tickets'));
@@ -32,7 +33,7 @@ class TicketController extends Controller
      */
     public function create()
     {
-        return view('pages.create');
+        return view('pages.create_ticket');
     }
 
     /**
@@ -70,10 +71,13 @@ class TicketController extends Controller
      */
     public function show($id)
     {
-        $ticket = Ticket::where('id', $id)
-        ->join('users', 'tickets.id', '=', 'users.id')
-        ->select('tickets.*','users.name')->first();;
-        return view('pages.show')->with('ticket', $ticket);
+        $tickets = Ticket::with('users')->where('tickets.id', $id)->get();
+        $users = User::all();
+        return view('pages.show_ticket', compact(['tickets', 'users']));
+
+        // $tickets = Ticket::find($id);
+        // $tickets->users()->attach(3);
+        
     }
 
     /**

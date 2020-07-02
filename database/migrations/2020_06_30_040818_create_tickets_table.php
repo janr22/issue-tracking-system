@@ -14,7 +14,7 @@ class CreateTicketsTable extends Migration
     public function up()
     {
         Schema::create('tickets', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->string('project');
             $table->string('subject');
             $table->string('email');
@@ -23,8 +23,6 @@ class CreateTicketsTable extends Migration
             $table->string('tracker');
             $table->string('priority');
             $table->timestamps();
-            $table->unsignedInteger('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

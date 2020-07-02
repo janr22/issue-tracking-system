@@ -3,6 +3,7 @@
 @section('content')
 <div class="container">
 
+
     <div class="row justify-content-center">
         <div class="col-md-10">
             <a href="{{ url('/create') }}" role="button" class="mb-2 btn btn-outline-secondary">New Ticket</a>

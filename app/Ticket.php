@@ -16,8 +16,8 @@ class Ticket extends Model
         'priority'
     ];
 
-    public function user()
+    public function users()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsToMany(User::class, 'tickets_users');
     }
 }
