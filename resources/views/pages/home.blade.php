@@ -29,7 +29,18 @@
                         <td>{{ $ticket->status }}</td>
                         <td>{{ $ticket->priority  }}</td>
                         <td><a href="{{ url('/' . $ticket->id) }}">{{ $ticket->subject}}</a></td>
-                        <td>{{ $ticket->name}}</td>
+
+                        <td>
+                            @if (count($ticket->users)>=2)
+                            {{ count($ticket->users) }} assignees
+                            @elseif (count($ticket->users)==0)
+                            No assignees
+                            @else
+                            @foreach($ticket->users as $user)
+                            {{ $user->name }}
+                            @endforeach
+                            @endif
+                        </td>
                         <td>{{ $ticket->updated_at}}</td>
                     </tr>
                     @endforeach

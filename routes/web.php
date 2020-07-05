@@ -15,9 +15,11 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', 'TicketController@index')->name('home');
-Route::resource('/', 'TicketController');
+// Route::resource('/', 'TicketController');
 Route::get('/create', 'TicketController@create');
 Route::get('/{id}', 'TicketController@show');
+Route::post('/', 'TicketController@store')->name('store');
+
 
 Route::group(['middleware' => 'guest'], function () {
     Route::get('login/google', 'Auth\LoginController@redirectToProvider');
@@ -25,6 +27,9 @@ Route::group(['middleware' => 'guest'], function () {
 });
 
 Route::group(['middleware' => 'auth'], function () {
+
+    Route::post('/{id}/assignee', 'TicketController@assignee')->name('assignee');
+    Route::post('/{id}/status', 'TicketController@status')->name('status');
     Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 });
 

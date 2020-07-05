@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTicketUsersTable extends Migration
+class CreateTicketUserTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateTicketUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('tickets_users', function (Blueprint $table) {
+        Schema::create('ticket_user', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('ticket_id');

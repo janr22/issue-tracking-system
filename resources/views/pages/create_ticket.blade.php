@@ -40,9 +40,8 @@
                 <div class="mb-3">
                     <label for="status">Status</label>
                     <select class="custom-select d-block w-100" name="status" required>
-                        <option value=""></option>
-                        <option>Closed</option>
                         <option>New</option>
+                        <option>Closed</option>
                         <option>Assigned</option>
                         <option>In-Progress</option>
                         <option>Resolved</option>
@@ -51,9 +50,8 @@
                 <div class="mb-3">
                     <label for="priority">Priority</label>
                     <select class="custom-select d-block w-100" name="priority" required>
-                        <option value=""></option>
-                        <option>Low</option>
                         <option>Normal</option>
+                        <option>Low</option>
                         <option>High</option>
                     </select>
                 </div>

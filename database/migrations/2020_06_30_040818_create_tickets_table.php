@@ -22,6 +22,8 @@ class CreateTicketsTable extends Migration
             $table->string('status');
             $table->string('tracker');
             $table->string('priority');
+            $table->string('confidentiality')->default('Not confidential');
+            $table->string('lock')->default('Unlock');
             $table->timestamps();
         });
     }

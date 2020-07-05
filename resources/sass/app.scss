@@ -1,11 +1,37 @@
+$success: #39a34f;
+$danger: #d73a49;
 // Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+@import url("https://fonts.googleapis.com/css?family=Nunito");
 
 // Variables
-@import 'variables';
+@import "variables";
 
 // Bootstrap
-@import '~bootstrap/scss/bootstrap';
+@import "~bootstrap/scss/bootstrap";
 
 //Bootstrap-select
-@import '~bootstrap-select/sass/bootstrap-select.scss';
+@import "~bootstrap-select/sass/bootstrap-select.scss";
+
+.state,
+.State {
+    display: inline-block;
+    padding: 5px 12px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    background-color: #6a737d;
+    border: 1px solid transparent;
+    border-radius: 2em;
+}
+
+.container-xl {
+    margin-right: auto;
+    margin-left: auto
+}
+
+.container-xl {
+    max-width: 1280px
+}

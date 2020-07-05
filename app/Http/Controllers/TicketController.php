@@ -6,42 +6,20 @@ use App\Ticket;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class TicketController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-
     public function index()
     {
-        $tickets = DB::table('tickets')->distinct()
-            ->leftjoin('tickets_users', 'tickets.id', '=', 'tickets_users.ticket_id')
-            ->leftjoin('users', 'users.id', '=', 'tickets_users.user_id')
-            ->select('tickets.*', 'users.name')
-            ->get();
+        $tickets = Ticket::with('users')->get();
         return view('pages.home', compact('tickets'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('pages.create_ticket');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         if (Auth::check()) {
@@ -63,54 +41,29 @@ class TicketController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Ticket  $ticket
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
-        $tickets = Ticket::with('users')->where('tickets.id', $id)->get();
+        $ticket = Ticket::with('users')->where('tickets.id', $id)->first();
         $users = User::all();
-        return view('pages.show_ticket', compact(['tickets', 'users']));
-
-        // $tickets = Ticket::find($id);
-        // $tickets->users()->attach(3);
-        
+        return view('pages.show_ticket', compact(['ticket', 'users']));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Ticket  $ticket
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Ticket $ticket)
+    public function assignee(Request $request, $id)
     {
-        //
+        $ticket = Ticket::find($id);
+        // $ticket->update(['status' => 'Assigned']);
+        $ticket->users()->sync($request->users);
+        return redirect()->back();
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Ticket  $ticket
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Ticket $ticket)
+    public function status($id)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Ticket  $ticket
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Ticket $ticket)
-    {
-        //
+        $ticket = Ticket::find($id);
+        if ($ticket->status == 'Closed') {
+            $ticket->update(['status' => 'Open']);
+        } else {
+            $ticket->update(['status' => 'Closed']);
+        }
+        return redirect()->back();
     }
 }

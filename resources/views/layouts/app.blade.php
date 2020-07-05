@@ -14,7 +14,7 @@
 
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white sticky-top border-bottom">
+        <nav style="background-color: #24292e" class="navbar navbar-expand-md navbar-dark sticky-top border-bottom">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     Ticket
@@ -32,9 +32,8 @@
                         </li>
                         @else
                         <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="py-1 nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                            <a id="navbarDropdown" class="py-1 nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <img class="rounded-circle" src="{{ Auth::user()->avatar }}" height="30px" width="30px" />
-                                <span class="caret"></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                 <h2 class="dropdown-header">{{ Auth::user()->name }}</h2>
@@ -74,6 +73,29 @@
             $(".alert").alert('close');
         }, 3000);
         $('.toast').toast('show');
+        // popovers
+        $('#popover-content').hide();
+        $('#popover-button').popover({
+            content: $('#popover-content'),
+            placement: 'bottom',
+            html: true
+        });
+        $('#popover-button').popover('show');
+        $('#popover-button').popover('hide');
+        $('#popover-content').show();
+    });
+    $('option').mousedown(function(e) {
+        e.preventDefault();
+        var originalScrollTop = $(this).parent().scrollTop();
+        console.log(originalScrollTop);
+        $(this).prop('selected', $(this).prop('selected') ? false : true);
+        var self = this;
+        $(this).parent().focus();
+        setTimeout(function() {
+            $(self).parent().scrollTop(originalScrollTop);
+        }, 0);
+
+        return false;
     });
 </script>
 
