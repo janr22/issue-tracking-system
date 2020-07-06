@@ -13,12 +13,13 @@ class Ticket extends Model
         'description',
         'status',
         'tracker',
-        'priority'
+        'priority',
+        'confidentiality',
+        'lock'
     ];
 
     public function users()
     {
         return $this->belongsToMany(User::class, 'ticket_user');
     }
-
 }

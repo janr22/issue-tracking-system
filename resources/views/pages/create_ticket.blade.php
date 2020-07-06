@@ -29,17 +29,19 @@
                     <label for="subject">Subject</label>
                     <input type="text" class="form-control" name="subject" required>
                 </div>
+                @guest
                 <div class="mb-3">
                     <label for="email">Email</label>
                     <input type="text" class="form-control" name="email" required>
                 </div>
+                @endguest
                 <div class="mb-3">
                     <label for="description">Description</label>
                     <textarea class="form-control" rows="5" name="description" required></textarea>
                 </div>
                 <div class="mb-3">
                     <label for="status">Status</label>
-                    <select class="custom-select d-block w-100" name="status" required>
+                    <select class="custom-select d-block w-100" @guest disabled @endguest name="status" required>
                         <option>New</option>
                         <option>Closed</option>
                         <option>Assigned</option>
@@ -49,16 +51,27 @@
                 </div>
                 <div class="mb-3">
                     <label for="priority">Priority</label>
-                    <select class="custom-select d-block w-100" name="priority" required>
+                    <select class="custom-select d-block w-100" @guest disabled @endguest name="priority" required>
                         <option>Normal</option>
                         <option>Low</option>
                         <option>High</option>
                     </select>
                 </div>
+                @guest
+                <div class="mb-3">
+                    <div class="g-recaptcha" data-sitekey="{{env('GOOGLE_RECAPTCHA_KEY')}}"> </div>
+                    @if ($errors->has('g-recaptcha-response'))
+                    <span class="invalid-feedback" style="display:block">
+                        <strong>{{ $errors->first('g-recaptcha-response') }}</strong>
+                    </span>
+                    @endif
+                </div>
+                @endguest
                 <hr class="mb-4">
                 <button type="submit" class="btn btn-outline-secondary">Create</button>
                 <button type="button" class="btn btn-outline-secondary">Preview</button>
             </form>
+
         </div>
     </div>
 </div>

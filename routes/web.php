@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', 'TicketController@index')->name('home');
-// Route::resource('/', 'TicketController');
 Route::get('/create', 'TicketController@create');
 Route::get('/{id}', 'TicketController@show');
 Route::post('/', 'TicketController@store')->name('store');
@@ -27,10 +26,11 @@ Route::group(['middleware' => 'guest'], function () {
 });
 
 Route::group(['middleware' => 'auth'], function () {
-
+    Route::post('logout', 'Auth\LoginController@logout')->name('logout');
     Route::post('/{id}/assignee', 'TicketController@assignee')->name('assignee');
     Route::post('/{id}/status', 'TicketController@status')->name('status');
-    Route::post('logout', 'Auth\LoginController@logout')->name('logout');
+    Route::post('/{id}/confidentiality', 'TicketController@confidentiality')->name('confidentiality');
+    Route::post('/{id}/lock', 'TicketController@lock')->name('lock');
 });
 
 Route::group(['middleware' => 'admin'], function () {

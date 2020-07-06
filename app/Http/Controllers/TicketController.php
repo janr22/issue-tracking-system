@@ -6,6 +6,7 @@ use App\Ticket;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Rules\Captcha;
 
 class TicketController extends Controller
 {
@@ -22,6 +23,10 @@ class TicketController extends Controller
 
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'g-recaptcha-response' => new Captcha()
+        ]);
+
         if (Auth::check()) {
             $ticket = $request->user()->tickets()->create($request->all());
             $ticket->save();
@@ -64,6 +69,20 @@ class TicketController extends Controller
         } else {
             $ticket->update(['status' => 'Closed']);
         }
+        return redirect()->back();
+    }
+
+    public function confidentiality(Request $request, $id)
+    {
+        $ticket = Ticket::find($id);
+        $ticket->update(['confidentiality' => $request->submit]);
+        return redirect()->back();
+    }
+
+    public function lock(Request $request, $id)
+    {
+        $ticket = Ticket::find($id);
+        $ticket->update(['lock' => $request->submit]);
         return redirect()->back();
     }
 }

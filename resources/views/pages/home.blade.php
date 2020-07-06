@@ -2,8 +2,6 @@
 
 @section('content')
 <div class="container">
-
-
     <div class="row justify-content-center">
         <div class="col-md-10">
             <a href="{{ url('/create') }}" role="button" class="mb-2 btn btn-outline-secondary">New Ticket</a>
@@ -29,7 +27,6 @@
                         <td>{{ $ticket->status }}</td>
                         <td>{{ $ticket->priority  }}</td>
                         <td><a href="{{ url('/' . $ticket->id) }}">{{ $ticket->subject}}</a></td>
-
                         <td>
                             @if (count($ticket->users)>=2)
                             {{ count($ticket->users) }} assignees
