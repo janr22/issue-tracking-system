@@ -22,4 +22,9 @@ class Ticket extends Model
     {
         return $this->belongsToMany(User::class, 'ticket_user');
     }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

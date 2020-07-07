@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Comment;
 use App\Ticket;
 use App\User;
 use Illuminate\Support\Facades\Auth;
@@ -30,7 +31,7 @@ class TicketController extends Controller
         if (Auth::check()) {
             $ticket = $request->user()->tickets()->create($request->all());
             $ticket->save();
-            return redirect('/');
+            return redirect('/' . $ticket->id);
         } else {
             $ticket = new Ticket([
                 'project' => $request->get('project'),
@@ -48,15 +49,17 @@ class TicketController extends Controller
 
     public function show($id)
     {
-        $ticket = Ticket::with('users')->where('tickets.id', $id)->first();
+        // $ticket = Ticket::with('users', 'comments')->where('tickets.id', $id)->first();
+        $ticket = Ticket::with('users.comments')->where('tickets.id', $id)->first();     
         $users = User::all();
+   
+        dd($ticket);
         return view('pages.show_ticket', compact(['ticket', 'users']));
     }
 
     public function assignee(Request $request, $id)
     {
         $ticket = Ticket::find($id);
-        // $ticket->update(['status' => 'Assigned']);
         $ticket->users()->sync($request->users);
         return redirect()->back();
     }
@@ -83,6 +86,13 @@ class TicketController extends Controller
     {
         $ticket = Ticket::find($id);
         $ticket->update(['lock' => $request->submit]);
+        return redirect()->back();
+    }
+
+    public function subject(Request $request, $id)
+    {
+        $ticket = Ticket::find($id);
+        $ticket->update(['subject' => $request->subject]);
         return redirect()->back();
     }
 }

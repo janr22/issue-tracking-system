@@ -1,47 +1,65 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container-xl clearfix px-3 px-md-4 px-lg-5">
+<div class="container-xl clearfix px-2 px-md-3 px-lg-4">
     <div>
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-2">
-            <h2 class="mb-3">{{ $ticket->subject }} <span class="font-weight-light text-muted"> #{{ $ticket->id }}</span></h2>
-            <div class="mb-2 mb-md-0">
-                <form method="post" action="{{route('status', $ticket->id)}}">
-                    @auth
+        <div class="formSection readOnly">
+            <form method="post" action="{{route('subject', $ticket->id)}}">
+                <div class="d-flex flex-column flex-md-row align-items-center pt-2">
                     @csrf
+                    <h2 class="text-muted mb-1">#{{ $ticket->id }}</h2>
+                    <h1 class="input-wrap mr-md-auto pb-1"><span class="width-machine" aria-hidden="true">{{$ticket->subject}}</span><input class="input" value="{{$ticket->subject}}" disabled type="text" name="subject"></h1>
+                    @auth
                     @if(Auth::user()->role == 'admin' || Auth::user()->role == 'moderator' || in_array(Auth::user()->id, $ticket->users()->pluck('users.id')->toArray()))
-                    <button type="submit" class="btn btn-sm btn-outline-secondary">Edit</button>
-                    @else
+                    <button type="button" class="btn btn-sm btn-outline-secondary editButton mr-1">Edit</button>
+                    <div class="actionButtons">
+                        <button type="submit" class="btn btn-sm btn-outline-secondary saveButton" type="submit">Save</button>
+                        <a href="#" class="cancelButton">Cancel</a>
+                    </div>
                     @endif
                     @endauth
-                    <a href="{{ url('/create') }}" role="button" class="btn btn-sm btn-success">New issue</a>
-                </form>
-            </div>
+                    <a href="{{ url('/create') }}" role="button" class="btn btn-sm btn-success editButton">New issue</a>
+                </div>
+            </form>
         </div>
+        <span class="State {{ $ticket->status == 'Open' || $ticket->status == 'New' ? 'bg-success' : 'bg-danger' }}">
+            @if ($ticket->status == 'Open' || $ticket->status =='New')
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                <path d="M12 7a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0112 7zm1 9a1 1 0 11-2 0 1 1 0 012 0z"></path>
+                <path fill-rule="evenodd" d="M12 1C5.925 1 1 5.925 1 12s4.925 11 11 11 11-4.925 11-11S18.075 1 12 1zM2.5 12a9.5 9.5 0 1119 0 9.5 9.5 0 01-19 0z"></path>
+            </svg>
+            @else
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                <path d="M2.5 12c0-5.24 4.288-9.5 9.593-9.5a9.608 9.608 0 017.197 3.219.75.75 0 001.12-.998A11.108 11.108 0 0012.093 1C5.973 1 1 5.919 1 12s4.973 11 11.093 11c5.403 0 9.91-3.832 10.893-8.915a.75.75 0 10-1.472-.285c-.848 4.381-4.74 7.7-9.421 7.7C6.788 21.5 2.5 17.24 2.5 12z"></path>
+                <path d="M12 17a1 1 0 100-2 1 1 0 000 2zm0-10a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0112 7zm11.28.78a.75.75 0 00-1.06-1.06l-3.47 3.47-1.47-1.47a.75.75 0 10-1.06 1.06l2 2a.75.75 0 001.06 0l4-4z"></path>
+            </svg>
+            @endif
+            {{ $ticket->status }}
+        </span>
     </div>
-    <span class="State {{ $ticket->status == 'Open' || $ticket->status == 'New' ? 'bg-success' : 'bg-danger' }}">
-        @if ($ticket->status == 'Open' || $ticket->status =='New')
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-            <path d="M12 7a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0112 7zm1 9a1 1 0 11-2 0 1 1 0 012 0z"></path>
-            <path fill-rule="evenodd" d="M12 1C5.925 1 1 5.925 1 12s4.925 11 11 11 11-4.925 11-11S18.075 1 12 1zM2.5 12a9.5 9.5 0 1119 0 9.5 9.5 0 01-19 0z"></path>
-        </svg>
-        @else
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-            <path d="M2.5 12c0-5.24 4.288-9.5 9.593-9.5a9.608 9.608 0 017.197 3.219.75.75 0 001.12-.998A11.108 11.108 0 0012.093 1C5.973 1 1 5.919 1 12s4.973 11 11.093 11c5.403 0 9.91-3.832 10.893-8.915a.75.75 0 10-1.472-.285c-.848 4.381-4.74 7.7-9.421 7.7C6.788 21.5 2.5 17.24 2.5 12z"></path>
-            <path d="M12 17a1 1 0 100-2 1 1 0 000 2zm0-10a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0112 7zm11.28.78a.75.75 0 00-1.06-1.06l-3.47 3.47-1.47-1.47a.75.75 0 10-1.06 1.06l2 2a.75.75 0 001.06 0l4-4z"></path>
-        </svg>
-        @endif
-        {{ $ticket->status }}
-    </span>
+
     <hr>
 
     <div class="row">
-        <div class="col-md-8 order-md-1">
-            <div class="card">
+        <div class="col-md-9 order-md-1">
+            <div class="card border-info">
+                <div class="card-header border-info" style="background-color: #f1f8ff;">
+                </div>
                 <div class="card-body">
                     <p>{{ $ticket->description }}</p>
                 </div>
             </div>
+            @foreach($ticket->comments as $comment)
+            <div class="card border-info mt-4">
+                <div class="card-header border-info" style="background-color: #f1f8ff;">
+                    <img class="rounded-circle mr-1" src=" {{ $comment->user->avatar }}" height="20px" width="20px" />
+                    {{ $comment->user->name }}
+                </div>
+                <div class="card-body">
+                    <p>{{ $comment->body }}</p>
+                </div>
+            </div>
+            @endforeach
 
             <div class="card mt-3">
                 <div class="card-body">
@@ -55,7 +73,11 @@
                     </ul>
                     <div class="tab-content py-3" id="myTabContent">
                         <div class="tab-pane fade show active" id="home" role="tabpanel">
-                            <textarea placeholder="Write a comment or drag your files here..." class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
+                            <form id="commentForm" method="post" action="{{ route('comment') }}">
+                                @csrf
+                                <textarea type="text" name="body" class="form-control"></textarea>
+                                <input type="hidden" name="ticket_id" value="{{ $ticket->id }}" />
+                            </form>
                         </div>
                         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                             <div class="card">
@@ -65,31 +87,30 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="float-right">
-                        <form method="post" action="{{route('status', $ticket->id)}}">
-                            @auth
-                            @csrf
-                            @if(Auth::user()->role == 'admin' || Auth::user()->role == 'moderator' || in_array(Auth::user()->id, $ticket->users()->pluck('users.id')->toArray()))
-                            @if($ticket->status =='Open' || $ticket->status =='New')
-                            <button type="submit" class="btn btn-outline-secondary">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" fill="red">
-                                    <path fill-rule="evenodd" d="M1.5 8a6.5 6.5 0 0110.65-5.003.75.75 0 00.959-1.153 8 8 0 102.592 8.33.75.75 0 10-1.444-.407A6.5 6.5 0 011.5 8zM8 12a1 1 0 100-2 1 1 0 000 2zm0-8a.75.75 0 01.75.75v3.5a.75.75 0 11-1.5 0v-3.5A.75.75 0 018 4zm4.78 4.28l3-3a.75.75 0 00-1.06-1.06l-2.47 2.47-.97-.97a.749.749 0 10-1.06 1.06l1.5 1.5a.75.75 0 001.06 0z"></path>
-                                </svg>
-                                Close issue
-                            </button>
-                            @else
-                            <button type="submit" class="btn btn-outline-secondary">Reopen issue</button>
-                            @endif
-                            @else
-                            @endif
-                            @endauth
-                            <a href="{{ url('/create') }}" role="button" class="btn btn-success">Comment</a>
-                        </form>
+                        @auth
+                        @if(Auth::user()->role == 'admin' || Auth::user()->role == 'moderator' || in_array(Auth::user()->id, $ticket->users()->pluck('users.id')->toArray()))
+                        <form method="post" id="statusForm" action="{{route('status', $ticket->id)}}">@csrf</form>
+                        @if($ticket->status =='Open' || $ticket->status =='New')
+                        <button form="statusForm" type="submit" class="btn btn-outline-secondary">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" fill="red">
+                                <path fill-rule="evenodd" d="M1.5 8a6.5 6.5 0 0110.65-5.003.75.75 0 00.959-1.153 8 8 0 102.592 8.33.75.75 0 10-1.444-.407A6.5 6.5 0 011.5 8zM8 12a1 1 0 100-2 1 1 0 000 2zm0-8a.75.75 0 01.75.75v3.5a.75.75 0 11-1.5 0v-3.5A.75.75 0 018 4zm4.78 4.28l3-3a.75.75 0 00-1.06-1.06l-2.47 2.47-.97-.97a.749.749 0 10-1.06 1.06l1.5 1.5a.75.75 0 001.06 0z"></path>
+                            </svg>
+                            Close issue
+                        </button>
+                        @else
+                        <button form="statusForm" type="submit" class="btn btn-outline-secondary">Reopen issue</button>
+                        @endif
+                        @endif
+                        @endauth
+                        <button form="commentForm" type="submit" role="button" class="btn btn-success">Comment</button>
                     </div>
+
                 </div>
             </div>
         </div>
-        <div class="col-md-4 order-md-2 mb-4">
+        <div class="col-md-3 order-md-2 mb-4">
             <ul class="list-group list-group-flush mb-3">
                 <li class="list-group-item d-flex justify-content-between lh-condensed">
                     <div>

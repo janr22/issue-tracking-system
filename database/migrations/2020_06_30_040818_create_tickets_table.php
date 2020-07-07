@@ -17,7 +17,7 @@ class CreateTicketsTable extends Migration
             $table->id();
             $table->string('project');
             $table->string('subject');
-            $table->string('email');
+            $table->string('email')->nullable();
             $table->string('description');
             $table->string('status');
             $table->string('tracker');

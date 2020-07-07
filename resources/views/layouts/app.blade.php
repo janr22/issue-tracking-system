@@ -114,6 +114,41 @@
         $(this).next('.dropdown-menu').toggle();
         e.stopPropagation();
     });
+    //edit subject input
+    $(document)
+        .on("click", ".editButton", function() {
+            var section = $(this).closest(".formSection");
+            var otherSections = $(".formSection").not(section);
+            var inputs = section.find("input");
+            section.removeClass("readOnly");
+            otherSections.addClass("disabled").find('button').prop("disabled", true);
+            oldValues = {};
+            inputs.each(function() {
+                    oldValues[this.id] = $(this).val();
+                })
+                .prop("disabled", false);
+        })
+        .on("click", ".cancelButton", function(e) {
+            var section = $(this).closest(".formSection");
+            var otherSections = $(".formSection").not(section);
+            var inputs = section.find("input");
+            section.addClass("readOnly");
+            otherSections.removeClass("disabled");
+            $('button').prop("disabled", false);
+            inputs.each(function() {
+                    $(this).val(oldValues[this.id]);
+                })
+                .prop("disabled", true)
+            e.stopPropagation();
+            e.preventDefault();
+        });
+
+    // Dealing with Input width
+    let el = document.querySelector(".input-wrap .input");
+    let widthMachine = document.querySelector(".input-wrap .width-machine");
+    el.addEventListener("keyup", () => {
+        widthMachine.innerHTML = el.value;
+    });
 </script>
 
 </html>

@@ -1,5 +1,6 @@
 $success: #39a34f;
 $danger: #d73a49;
+$info: #c0d3eb;
 // Fonts
 @import url("https://fonts.googleapis.com/css?family=Nunito");
 
@@ -14,24 +15,66 @@ $danger: #d73a49;
 
 .state,
 .State {
-    display: inline-block;
-    padding: 5px 12px;
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 20px;
-    color: #fff;
-    text-align: center;
-    white-space: nowrap;
-    background-color: #6a737d;
-    border: 1px solid transparent;
-    border-radius: 2em;
+  display: inline-block;
+  padding: 5px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  background-color: #6a737d;
+  border: 1px solid transparent;
+  border-radius: 2em;
 }
 
 .container-xl {
-    margin-right: auto;
-    margin-left: auto
+  margin-right: auto;
+  margin-left: auto;
 }
 
 .container-xl {
-    max-width: 1280px
+  max-width: 1280px;
+}
+
+// edit
+
+.editButton {
+  display: none;
+  transition: background 0.4s ease;
+}
+
+input[disabled] {
+  color: #000;
+  border-color: transparent;
+  background-color: #ffffff;
+}
+
+.readOnly .actionButtons {
+  display: none;
+}
+
+.readOnly .editButton {
+  display: block;
+}
+//input
+
+.input,
+.textarea {
+  border: 1px solid #ccc;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 1px 6px;
+}
+
+.input-wrap {
+  position: relative;
+}
+.input-wrap .input {
+  position: absolute;
+  width: 100%;
+  left: 0;
+}
+.width-machine {
+  padding: 0 1rem;
 }

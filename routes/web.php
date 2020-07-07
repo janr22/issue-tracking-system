@@ -31,6 +31,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/{id}/status', 'TicketController@status')->name('status');
     Route::post('/{id}/confidentiality', 'TicketController@confidentiality')->name('confidentiality');
     Route::post('/{id}/lock', 'TicketController@lock')->name('lock');
+    Route::post('/{id}/subject', 'TicketController@subject')->name('subject');
+    Route::post('/comment', 'CommentController@store')->name('comment');
 });
 
 Route::group(['middleware' => 'admin'], function () {
