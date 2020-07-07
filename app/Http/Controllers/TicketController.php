@@ -52,8 +52,6 @@ class TicketController extends Controller
         // $ticket = Ticket::with('users', 'comments')->where('tickets.id', $id)->first();
         $ticket = Ticket::with('users.comments')->where('tickets.id', $id)->first();     
         $users = User::all();
-   
-        dd($ticket);
         return view('pages.show_ticket', compact(['ticket', 'users']));
     }
 
