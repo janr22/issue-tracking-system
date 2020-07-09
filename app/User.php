@@ -51,4 +51,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Comment::class);
     }
+
+    public function owns()
+    {
+        return $this->hasMany(Ticket::class, 'owner_id');
+    }
 }

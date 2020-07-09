@@ -7,14 +7,14 @@
             <form method="post" action="{{route('subject', $ticket->id)}}">
                 <div class="d-flex flex-column flex-md-row align-items-center pt-2">
                     @csrf
-                    <h2 class="text-muted mb-1">#{{ $ticket->id }}</h2>
-                    <h1 class="input-wrap mr-md-auto pb-1"><span class="width-machine" aria-hidden="true">{{$ticket->subject}}</span><input class="input" value="{{$ticket->subject}}" disabled type="text" name="subject"></h1>
+                    <h1 class="text-muted mb-2">#{{ $ticket->id }}</h1>
+                    <h1 class="input-wrap mr-md-auto pb-1"><span class="width-plus pr-1" aria-hidden="true">{{$ticket->subject}}</span><input class="input" value="{{$ticket->subject}}" disabled type="text" name="subject"></h1>
                     @auth
-                    @if(Auth::user()->role == 'admin' || Auth::user()->role == 'moderator' || in_array(Auth::user()->id, $ticket->users()->pluck('users.id')->toArray()))
+                    @if(Auth::user()->id == $ticket->owner->id || Auth::user()->role == 'admin' || Auth::user()->role == 'moderator' || in_array(Auth::user()->id, $ticket->users()->pluck('users.id')->toArray()))
                     <button type="button" class="btn btn-sm btn-outline-secondary editButton mr-1">Edit</button>
                     <div class="actionButtons">
                         <button type="submit" class="btn btn-sm btn-outline-secondary saveButton" type="submit">Save</button>
-                        <a href="#" class="cancelButton">Cancel</a>
+                        <a href="#" class="ml-2 cancelButton">Cancel</a>
                     </div>
                     @endif
                     @endauth
@@ -35,15 +35,28 @@
             </svg>
             @endif
             {{ $ticket->status }}
+
         </span>
+        <span class="ml-1 font-weight-bolder">{{ $ticket->owner->name }}</span> open this issue ·
+        {{ count($ticket->comments) }} comments
     </div>
-
     <hr>
-
     <div class="row">
         <div class="col-md-9 order-md-1">
             <div class="card border-info">
                 <div class="card-header border-info" style="background-color: #f1f8ff;">
+                    <img class="rounded-circle mr-1" src=" {{ $ticket->owner->avatar }}" height="20px" width="20px" />
+                    <span class="font-weight-bolder">{{ $ticket->owner->name }}</span>
+                    <span class="text-muted">created {{ $ticket->created_at->diffForHumans(null, true).' ago'}}</span>
+                    @auth
+                    @if(Auth::user()->id == $ticket->owner->id || Auth::user()->role == 'admin' || Auth::user()->role == 'moderator' || in_array(Auth::user()->id, $ticket->users()->pluck('users.id')->toArray()))
+                    <small class="float-sm-right">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+                            <path d="M8 9a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM1.5 9a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm13 0a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"></path>
+                        </svg>
+                    </small>
+                    @endif
+                    @endauth
                 </div>
                 <div class="card-body">
                     <p>{{ $ticket->description }}</p>
@@ -53,7 +66,18 @@
             <div class="card border-info mt-4">
                 <div class="card-header border-info" style="background-color: #f1f8ff;">
                     <img class="rounded-circle mr-1" src=" {{ $comment->user->avatar }}" height="20px" width="20px" />
-                    {{ $comment->user->name }}
+                    <span class="font-weight-bolder">{{ $comment->user->name }}</span>
+                    <span class="text-muted">commented
+                        {{ $comment->created_at->diffForHumans(null, true).' ago'}}</span>
+                    @auth
+                    @if(Auth::user()->id == $ticket->owner->id || Auth::user()->role == 'admin' || Auth::user()->role == 'moderator' || in_array(Auth::user()->id, $ticket->users()->pluck('users.id')->toArray()))
+                    <small class="float-sm-right">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+                            <path d="M8 9a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM1.5 9a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm13 0a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"></path>
+                        </svg>
+                    </small>
+                    @endif
+                    @endauth
                 </div>
                 <div class="card-body">
                     <p>{{ $comment->body }}</p>
@@ -62,8 +86,8 @@
             @endforeach
 
             <div class="card mt-3">
-                <div class="card-body">
-                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <div class="card-header">
+                    <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Write</a>
                         </li>
@@ -71,18 +95,22 @@
                             <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Preview</a>
                         </li>
                     </ul>
-                    <div class="tab-content py-3" id="myTabContent">
+                </div>
+                <div class="card-body">
+                    <div class="tab-content pb-3" id="myTabContent">
                         <div class="tab-pane fade show active" id="home" role="tabpanel">
                             <form id="commentForm" method="post" action="{{ route('comment') }}">
                                 @csrf
-                                <textarea type="text" name="body" class="form-control"></textarea>
+                                <textarea type="text" name="body" class="form-control" data-bind="body" rows="4"></textarea>
                                 <input type="hidden" name="ticket_id" value="{{ $ticket->id }}" />
                             </form>
                         </div>
                         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                             <div class="card">
                                 <div class="card-body">
-                                    <p>Preview</p>
+                                    <div class="dropzone">
+                                        <div class="info"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -90,7 +118,7 @@
 
                     <div class="float-right">
                         @auth
-                        @if(Auth::user()->role == 'admin' || Auth::user()->role == 'moderator' || in_array(Auth::user()->id, $ticket->users()->pluck('users.id')->toArray()))
+                        @if(Auth::user()->id == $ticket->owner->id || Auth::user()->role == 'admin' || Auth::user()->role == 'moderator' || in_array(Auth::user()->id, $ticket->users()->pluck('users.id')->toArray()))
                         <form method="post" id="statusForm" action="{{route('status', $ticket->id)}}">@csrf</form>
                         @if($ticket->status =='Open' || $ticket->status =='New')
                         <button form="statusForm" type="submit" class="btn btn-outline-secondary">
@@ -122,7 +150,7 @@
                         </div>
                     </div>
                     @auth
-                    @if(Auth::user()->role == 'admin' || Auth::user()->role == 'moderator' || in_array(Auth::user()->id, $ticket->users()->pluck('users.id')->toArray()))
+                    @if(Auth::user()->id == $ticket->owner->id || Auth::user()->role == 'admin' || Auth::user()->role == 'moderator' || in_array(Auth::user()->id, $ticket->users()->pluck('users.id')->toArray()))
                     <a type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="height: 25px;">
                         <span class="text-muted">Edit</span>
                     </a>
@@ -155,7 +183,7 @@
                         </div>
                     </div>
                     @auth
-                    @if(Auth::user()->role == 'admin' || Auth::user()->role == 'moderator' || in_array(Auth::user()->id, $ticket->users()->pluck('users.id')->toArray()))
+                    @if(Auth::user()->id == $ticket->owner->id || Auth::user()->role == 'admin' || Auth::user()->role == 'moderator' || in_array(Auth::user()->id, $ticket->users()->pluck('users.id')->toArray()))
                     <span class="text-muted">Edit</span>
                     @endif
                     @endauth
@@ -168,7 +196,7 @@
                         </div>
                     </div>
                     @auth
-                    @if(Auth::user()->role == 'admin' || Auth::user()->role == 'moderator' || in_array(Auth::user()->id, $ticket->users()->pluck('users.id')->toArray()))
+                    @if(Auth::user()->id == $ticket->owner->id || Auth::user()->role == 'admin' || Auth::user()->role == 'moderator' || in_array(Auth::user()->id, $ticket->users()->pluck('users.id')->toArray()))
                     <span class="text-muted">Edit</span>
                     @endif
                     @endauth
@@ -181,7 +209,7 @@
                         </div>
                     </div>
                     @auth
-                    @if(Auth::user()->role == 'admin' || Auth::user()->role == 'moderator' || in_array(Auth::user()->id, $ticket->users()->pluck('users.id')->toArray()))
+                    @if(Auth::user()->id == $ticket->owner->id || Auth::user()->role == 'admin' || Auth::user()->role == 'moderator' || in_array(Auth::user()->id, $ticket->users()->pluck('users.id')->toArray()))
                     <span class="text-muted">Edit</span>
                     @endif
                     @endauth
@@ -190,15 +218,39 @@
                     <div>
                         <p class="my-0">Labels</p>
                         <div>
-                            None
+                            @foreach($ticket->labels as $label)
+                            <button type="button" class="py-0 px-1 mb-1 d-inline btn btn-{{ $label->color }}">{{ $label->name }}</button>
+                            @endforeach
                         </div>
                     </div>
                     @auth
-                    @if(Auth::user()->role == 'admin' || Auth::user()->role == 'moderator' || in_array(Auth::user()->id, $ticket->users()->pluck('users.id')->toArray()))
-                    <span class="text-muted">Edit</span>
+                    @if(Auth::user()->id == $ticket->owner->id || Auth::user()->role == 'admin' || Auth::user()->role == 'moderator' || in_array(Auth::user()->id, $ticket->users()->pluck('users.id')->toArray()))
+                    <a type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="height: 25px;">
+                        <span class="text-muted">Edit</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                        <form class="px-3 py-2" method="post" action="{{route('label', $ticket->id)}}">
+                            @csrf
+                            <div class="form-group mb-1">
+                                <label for="assignee">Assign people to this issue</label>
+                                <select multiple="multiple" class="form-control custom-select" name="labels[]" id="assignee">
+                                    @foreach ($labels as $label)
+                                    <option value="{{ $label->id }}" {{ isset($label) && in_array($label->id, $ticket->labels()->pluck('labels.id')->toArray()) ? 'selected' : '' }}>
+                                    <div class="float-left color mr-2" style="margin-top: 2px; background-color: #d73a4a"></div>
+                                        {{ $label->name }}
+                                    </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <button type="submit" class="btn btn-outline-secondary">Ok</button>
+                            </div>
+                        </form>
+                    </div>
                     @endif
                     @endauth
                 </li>
+                
                 <li class="list-group-item d-flex justify-content-between lh-condensed">
                     <div>
                         <p class="my-0">Confidentiality</p>
@@ -220,7 +272,7 @@
                         </div>
                     </div>
                     @auth
-                    @if(Auth::user()->role == 'admin' || Auth::user()->role == 'moderator' || in_array(Auth::user()->id, $ticket->users()->pluck('users.id')->toArray()))
+                    @if(Auth::user()->id == $ticket->owner->id || Auth::user()->role == 'admin' || Auth::user()->role == 'moderator' || in_array(Auth::user()->id, $ticket->users()->pluck('users.id')->toArray()))
                     <a type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="height: 25px;">
                         <span class="text-muted">Edit</span>
                     </a>
@@ -251,7 +303,7 @@
                         </div>
                     </div>
                     @auth
-                    @if(Auth::user()->role == 'admin' || Auth::user()->role == 'moderator' || in_array(Auth::user()->id, $ticket->users()->pluck('users.id')->toArray()))
+                    @if(Auth::user()->id == $ticket->owner->id || Auth::user()->role == 'admin' || Auth::user()->role == 'moderator' || in_array(Auth::user()->id, $ticket->users()->pluck('users.id')->toArray()))
                     <a type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="height: 25px;">
                         <span class="text-muted">Edit</span>
                     </a>
@@ -287,7 +339,6 @@
             </ul>
         </div>
     </div>
-
 </div>
 
 @endsection

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Label;
 use App\Comment;
 use App\Ticket;
 use App\User;
@@ -49,10 +50,10 @@ class TicketController extends Controller
 
     public function show($id)
     {
-        // $ticket = Ticket::with('users', 'comments')->where('tickets.id', $id)->first();
-        $ticket = Ticket::with('users.comments')->where('tickets.id', $id)->first();     
+        $ticket = Ticket::with('users.comments', 'labels', 'owner')->where('tickets.id', $id)->first();
         $users = User::all();
-        return view('pages.show_ticket', compact(['ticket', 'users']));
+        $labels = Label::all();
+        return view('pages.show_ticket', compact(['ticket', 'users', 'labels']));
     }
 
     public function assignee(Request $request, $id)
@@ -91,6 +92,20 @@ class TicketController extends Controller
     {
         $ticket = Ticket::find($id);
         $ticket->update(['subject' => $request->subject]);
+        return redirect()->back();
+    }
+
+    public function description(Request $request, $id)
+    {
+        $ticket = Ticket::find($id);
+        $ticket->update(['description' => $request->description]);
+        return redirect()->back();
+    }
+
+    public function label(Request $request, $id)
+    {
+        $ticket = Ticket::find($id);
+        $ticket->labels()->sync($request->labels);
         return redirect()->back();
     }
 }

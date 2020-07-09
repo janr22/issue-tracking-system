@@ -7,6 +7,9 @@
             <h4 class="mb-3">New issue</h4>
             <form method="post" action="{{ route('store') }}">
                 @csrf
+                @auth
+                <input type="hidden" name="owner_id" value="{{ Auth::user()->id }}" />
+                @endauth
                 <div class="mb-3">
                     <label for="project">Project</label>
                     <select class="custom-select d-block w-100" name="project" required>
@@ -52,7 +55,7 @@
                 <div class="mb-3">
                     <label for="priority">Priority</label>
                     <select class="custom-select d-block w-100" @guest disabled @endguest name="priority" required>
-                        <option>Normal</option>
+                        <option selected>Normal</option>
                         <option>Low</option>
                         <option>High</option>
                     </select>

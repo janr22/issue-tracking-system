@@ -10,9 +10,6 @@ $info: #c0d3eb;
 // Bootstrap
 @import "~bootstrap/scss/bootstrap";
 
-//Bootstrap-select
-@import "~bootstrap-select/sass/bootstrap-select.scss";
-
 .state,
 .State {
   display: inline-block;
@@ -26,6 +23,14 @@ $info: #c0d3eb;
   background-color: #6a737d;
   border: 1px solid transparent;
   border-radius: 2em;
+}
+
+.IssueLabel.sidebar-labels-style {
+  display: inline-block!important;
+  width: -webkit-min-content!important;
+  width: -moz-min-content!important;
+  width: min-content!important;
+  margin: 2px 2px 2px 0
 }
 
 .container-xl {
@@ -75,6 +80,6 @@ input[disabled] {
   width: 100%;
   left: 0;
 }
-.width-machine {
+.width-plus {
   padding: 0 1rem;
 }

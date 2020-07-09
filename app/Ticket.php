@@ -15,7 +15,8 @@ class Ticket extends Model
         'tracker',
         'priority',
         'confidentiality',
-        'lock'
+        'lock',
+        'owner_id'
     ];
 
     public function users()
@@ -23,8 +24,18 @@ class Ticket extends Model
         return $this->belongsToMany(User::class, 'ticket_user');
     }
 
+    public function labels()
+    {
+        return $this->belongsToMany(Label::class, 'label_ticket');
+    }
+
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'owner_id');
     }
 }

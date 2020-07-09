@@ -145,10 +145,11 @@
 
     // Dealing with Input width
     let el = document.querySelector(".input-wrap .input");
-    let widthMachine = document.querySelector(".input-wrap .width-machine");
-    el.addEventListener("keyup", () => {
-        widthMachine.innerHTML = el.value;
-    });
+    let widthMachine = document.querySelector(".input-wrap .width-plus");
+    // disabled select
+    $('form').submit(function() {
+        $('[disabled]').removeAttr('disabled');
+    })
 </script>
 
 </html>
