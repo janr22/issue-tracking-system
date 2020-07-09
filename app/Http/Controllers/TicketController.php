@@ -58,14 +58,14 @@ class TicketController extends Controller
 
     public function assignee(Request $request, $id)
     {
-        $ticket = Ticket::find($id);
+        $ticket = Ticket::findOrFail($id);
         $ticket->users()->sync($request->users);
         return redirect()->back();
     }
 
     public function status($id)
     {
-        $ticket = Ticket::find($id);
+        $ticket = Ticket::findOrFail($id);
         if ($ticket->status == 'Closed') {
             $ticket->update(['status' => 'Open']);
         } else {
@@ -76,36 +76,37 @@ class TicketController extends Controller
 
     public function confidentiality(Request $request, $id)
     {
-        $ticket = Ticket::find($id);
+        $ticket = Ticket::findOrFail($id);
         $ticket->update(['confidentiality' => $request->submit]);
         return redirect()->back();
     }
 
     public function lock(Request $request, $id)
     {
-        $ticket = Ticket::find($id);
+        $ticket = Ticket::findOrFail($id);
         $ticket->update(['lock' => $request->submit]);
         return redirect()->back();
     }
 
     public function subject(Request $request, $id)
     {
-        $ticket = Ticket::find($id);
+        $ticket = Ticket::findOrFail($id);
         $ticket->update(['subject' => $request->subject]);
         return redirect()->back();
     }
 
     public function description(Request $request, $id)
     {
-        $ticket = Ticket::find($id);
+        $ticket = Ticket::findOrFail($id);
         $ticket->update(['description' => $request->description]);
         return redirect()->back();
     }
 
     public function label(Request $request, $id)
     {
-        $ticket = Ticket::find($id);
+        $ticket = Ticket::findOrFail($id);
         $ticket->labels()->sync($request->labels);
         return redirect()->back();
     }
+
 }

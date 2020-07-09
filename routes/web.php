@@ -13,7 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
+Route::group(['middleware' => 'admin'], function () {
+    Route::get('/users', 'UserController@index');
+    Route::post('/users/status/{id}', 'UserController@status')->name('user_status');
+    Route::post('/users/role/{id}', 'UserController@role')->name('role');
+});
 Route::get('/', 'TicketController@index')->name('home');
 Route::get('/create', 'TicketController@create');
 Route::get('/{id}', 'TicketController@show');
@@ -34,9 +38,4 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/{id}/subject', 'TicketController@subject')->name('subject');
     Route::post('/{id}/label', 'TicketController@label')->name('label');
     Route::post('/comment', 'CommentController@store')->name('comment');
-    
-});
-
-Route::group(['middleware' => 'admin'], function () {
-    Route::view('/users', 'pages.users')->name('create');
 });
