@@ -18,6 +18,7 @@ Route::group(['middleware' => 'admin'], function () {
     Route::post('/users/status/{id}', 'UserController@status')->name('user_status');
     Route::post('/users/role/{id}', 'UserController@role')->name('role');
 });
+
 Route::get('/', 'TicketController@index')->name('home');
 Route::get('/create', 'TicketController@create');
 Route::get('/{id}', 'TicketController@show');

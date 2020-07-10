@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Seeder;
 use App\Label;
-use Illuminate\Support\Facades\Lang;
 
 class LabelSeeder extends Seeder
 {

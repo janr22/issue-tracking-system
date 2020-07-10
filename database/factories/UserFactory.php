@@ -21,6 +21,9 @@ $factory->define(User::class, function (Faker $faker) {
     return [
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,
+        'avatar' => 'https://lh3.googleusercontent.com/ogw/ADGmqu_UggxPzsIdUygsoV0QrCr0-l2juCHaSDR7sTAe4Q=s83-c-mo',
+        'status' => '0',
+        'role' => 'user',
         'email_verified_at' => now(),
         'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
         'remember_token' => Str::random(10),

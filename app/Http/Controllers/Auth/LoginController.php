@@ -27,8 +27,9 @@ class LoginController extends Controller
             'name' => $user->name,
             'password' => Hash::make('password'),
             'avatar' => $user->avatar,
+            'status' => 0,
         ]);
-        if (Auth::attempt(['password' => 'password', 'status' => 0])) {
+        if (Auth::attempt(['users.status' => 0, 'password' => 'password' ])) {
             Auth::login($user, false);
             return redirect('/');
         } else {

@@ -9,7 +9,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::whereIn('role', ['user', 'moderator'])->get();;
+        $users = User::whereIn('role', ['user', 'moderator'])->paginate(10);;
         return view('pages.users', compact('users'));
     }
     public function status(Request $request, $id)

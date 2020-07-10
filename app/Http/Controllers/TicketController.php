@@ -14,7 +14,7 @@ class TicketController extends Controller
 {
     public function index()
     {
-        $tickets = Ticket::with('users')->get();
+        $tickets = Ticket::with('users')->paginate(10);
         return view('pages.home', compact('tickets'));
     }
 
@@ -41,7 +41,8 @@ class TicketController extends Controller
                 'description' => $request->get('description'),
                 'status' => $request->get('status'),
                 'tracker' => $request->get('tracker'),
-                'priority' => $request->get('priority')
+                'priority' => $request->get('priority'),
+                'owner_id' => $request->get('owner_id'),
             ]);
             $ticket->save();
             return redirect('/');

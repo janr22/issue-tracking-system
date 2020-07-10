@@ -37,16 +37,24 @@
             {{ $ticket->status }}
 
         </span>
-        <span class="ml-1 font-weight-bolder">{{ $ticket->owner->name }}</span> open this issue ·
-        {{ count($ticket->comments) }} comments
+        @if(empty($ticket->owner->name))
+        <span class="font-weight-bolder">Anonymous</span>
+        @else
+        <span class="ml-1 font-weight-bolder">{{ $ticket->owner->name }}</span> open this issue
+        @endif
+        · {{ count($ticket->comments) }} comments
     </div>
     <hr>
     <div class="row">
         <div class="col-md-9 order-md-1">
             <div class="card border-info">
                 <div class="card-header border-info" style="background-color: #f1f8ff;">
+                    @if(empty($ticket->owner->name))
+                    <span class="font-weight-bolder">Anonymous</span>
+                    @else
                     <img class="rounded-circle mr-1" src=" {{ $ticket->owner->avatar }}" height="20px" width="20px" />
                     <span class="font-weight-bolder">{{ $ticket->owner->name }}</span>
+                    @endif
                     <span class="text-muted">created {{ $ticket->created_at->diffForHumans(null, true).' ago'}}</span>
                     @auth
                     @if(Auth::user()->id == $ticket->owner->id || Auth::user()->role == 'admin' || Auth::user()->role == 'moderator' || in_array(Auth::user()->id, $ticket->users()->pluck('users.id')->toArray()))
@@ -134,7 +142,6 @@
                         @endauth
                         <button form="commentForm" type="submit" role="button" class="btn btn-success">Comment</button>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -144,9 +151,11 @@
                     <div>
                         <p class="my-0">Assignee</p>
                         <div>
-                            @foreach($ticket->users as $user)
+                            @forelse($ticket->users as $user)
                             <p class="my-0"><img class="rounded-circle mr-1" src="{{ $user->avatar }}" height="20px" width="20px" />{{ $user->name }}</p>
-                            @endforeach
+                            @empty
+                            None
+                            @endforelse
                         </div>
                     </div>
                     @auth
@@ -173,7 +182,6 @@
                     </div>
                     @endif
                     @endauth
-
                 </li>
                 <li class="list-group-item d-flex justify-content-between lh-condensed">
                     <div>
@@ -218,6 +226,9 @@
                     <div>
                         <p class="my-0">Labels</p>
                         <div>
+                            @if (count($ticket->labels)==0)
+                            None
+                            @endif
                             @foreach($ticket->labels as $label)
                             <button type="button" class="py-0 px-1 mb-1 d-inline btn btn-{{ $label->color }}">{{ $label->name }}</button>
                             @endforeach
@@ -236,7 +247,7 @@
                                 <select multiple="multiple" class="form-control custom-select" name="labels[]" id="assignee">
                                     @foreach ($labels as $label)
                                     <option value="{{ $label->id }}" {{ isset($label) && in_array($label->id, $ticket->labels()->pluck('labels.id')->toArray()) ? 'selected' : '' }}>
-                                    <div class="float-left color mr-2" style="margin-top: 2px; background-color: #d73a4a"></div>
+                                        <div class="float-left color mr-2" style="margin-top: 2px; background-color: #d73a4a"></div>
                                         {{ $label->name }}
                                     </option>
                                     @endforeach
@@ -250,7 +261,7 @@
                     @endif
                     @endauth
                 </li>
-                
+
                 <li class="list-group-item d-flex justify-content-between lh-condensed">
                     <div>
                         <p class="my-0">Confidentiality</p>

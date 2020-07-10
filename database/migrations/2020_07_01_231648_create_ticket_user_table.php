@@ -18,10 +18,8 @@ class CreateTicketUserTable extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('ticket_id');
             $table->timestamps();
-            $table->foreign('user_id')->references('id')->on('users')
-            ->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('ticket_id')->references('id')->on('tickets')
-            ->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('ticket_id')->references('id')->on('tickets');
         });
     }
 

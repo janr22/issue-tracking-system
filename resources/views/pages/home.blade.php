@@ -4,10 +4,10 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-10">
-            <a href="{{ url('/create') }}" role="button" class="mb-2 btn btn-outline-secondary">New Ticket</a>
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
+            <a href="{{ url('/create') }}" role="button" class="mb-2 btn-sm btn btn-success">New Ticket</a>
+            <table class="border table table-sm table-striped table-borderless">
+                <thead style="background-color: #eeeeee;">
+                    <tr class="text-primary">
                         <th scope="col">#</th>
                         <th scope="col">Project</th>
                         <th scope="col">Tracker</th>
@@ -31,7 +31,7 @@
                             @if (count($ticket->users)>=2)
                             {{ count($ticket->users) }} assignees
                             @elseif (count($ticket->users)==0)
-                            No assignees
+                            No assignee
                             @else
                             @foreach($ticket->users as $user)
                             {{ $user->name }}
@@ -43,6 +43,7 @@
                     @endforeach
                 </tbody>
             </table>
+            {{ $tickets->links() }}
         </div>
     </div>
     @endsection

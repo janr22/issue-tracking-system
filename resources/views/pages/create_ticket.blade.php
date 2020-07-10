@@ -10,6 +10,9 @@
                 @auth
                 <input type="hidden" name="owner_id" value="{{ Auth::user()->id }}" />
                 @endauth
+                @guest
+                <input type="hidden" name="owner_id" value="1" />
+                @endguest
                 <div class="mb-3">
                     <label for="project">Project</label>
                     <select class="custom-select d-block w-100" name="project" required>
@@ -35,7 +38,7 @@
                 @guest
                 <div class="mb-3">
                     <label for="email">Email</label>
-                    <input type="text" class="form-control" name="email" required>
+                    <input type="email" class="form-control" name="email" required>
                 </div>
                 @endguest
                 <div class="mb-3">

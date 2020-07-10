@@ -24,7 +24,7 @@ class CreateTicketsTable extends Migration
             $table->string('priority');
             $table->string('confidentiality')->default('Not confidential');
             $table->string('lock')->default('Unlock');
-            $table->integer('owner_id')->unsigned()->nullable();
+            $table->unsignedBigInteger('owner_id')->nullable();
             $table->foreign('owner_id')->references('id')->on('users');
             $table->timestamps();
         });
