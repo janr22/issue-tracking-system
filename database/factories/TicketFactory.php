@@ -14,7 +14,7 @@ $factory->define(Ticket::class, function (Faker $faker) {
         'status' => $faker->randomElement(['New', 'Closed', 'Assigned', 'In-Progress', 'Resolved']),
         'tracker' => $faker->randomElement(['Feature', 'Bug']),
         'priority' => $faker->randomElement(['Normal', 'Low', 'High']),
-        'confidentiality' => $faker->randomElement(['Confidential', 'Not confidential']),
+        'confidentiality' => $faker->randomElement(['Private', 'Public']),
         'lock' => $faker->randomElement(['Lock', 'Unlock']),
         'owner_id'
     ];

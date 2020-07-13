@@ -8,17 +8,19 @@
                 <div class="d-flex flex-column flex-md-row align-items-center pt-2">
                     @csrf
                     <h1 class="text-muted mb-2">#{{ $ticket->id }}</h1>
-                    <h1 class="input-wrap mr-md-auto pb-1"><span class="width-plus pr-1" aria-hidden="true">{{$ticket->subject}}</span><input class="input" value="{{$ticket->subject}}" disabled type="text" name="subject"></h1>
+                    <h1 class="input-wrap mr-md-auto pb-1">
+                        <input value="{{$ticket->subject}}" disabled type="text" name="subject" style="display: table-cell; width: 100%;">
+                    </h1>
                     @auth
                     @if(Auth::user()->id == $ticket->owner->id || Auth::user()->role == 'admin' || Auth::user()->role == 'moderator' || in_array(Auth::user()->id, $ticket->users()->pluck('users.id')->toArray()))
                     <button type="button" class="btn btn-sm btn-outline-secondary editButton mr-1">Edit</button>
                     <div class="actionButtons">
                         <button type="submit" class="btn btn-sm btn-outline-secondary saveButton" type="submit">Save</button>
-                        <a href="#" class="ml-2 cancelButton">Cancel</a>
+                        <a role="button" class="ml-2 cancelButton">Cancel</a>
                     </div>
                     @endif
                     @endauth
-                    <a href="{{ url('/create') }}" role="button" class="btn btn-sm btn-success editButton">New issue</a>
+                    <a href="{{ url('/create') }}" class="btn btn-sm btn-success editButton">New issue</a>
                 </div>
             </form>
         </div>
@@ -48,7 +50,7 @@
     <div class="row">
         <div class="col-md-9 order-md-1">
             <div class="card border-info">
-                <div class="card-header border-info" style="background-color: #f1f8ff;">
+                <div class="card-header border-info px-3" style="background-color: #f1f8ff;">
                     @if(empty($ticket->owner->name))
                     <span class="font-weight-bolder">Anonymous</span>
                     @else
@@ -66,13 +68,13 @@
                     @endif
                     @endauth
                 </div>
-                <div class="card-body">
+                <div class="card-body px-3">
                     <p>{{ $ticket->description }}</p>
                 </div>
             </div>
             @foreach($ticket->comments as $comment)
             <div class="card border-info mt-4">
-                <div class="card-header border-info" style="background-color: #f1f8ff;">
+                <div class="card-header border-info px-3" style="background-color: #f1f8ff;">
                     <img class="rounded-circle mr-1" src=" {{ $comment->user->avatar }}" height="20px" width="20px" />
                     <span class="font-weight-bolder">{{ $comment->user->name }}</span>
                     <span class="text-muted">commented
@@ -87,12 +89,12 @@
                     @endif
                     @endauth
                 </div>
-                <div class="card-body">
-                    <p>{{ $comment->body }}</p>
+                <div class="card-body px-3">
+                    <p>{!! $comment->body !!}</p>
                 </div>
             </div>
             @endforeach
-
+            @auth
             <div class="card mt-3">
                 <div class="card-header">
                     <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
@@ -109,16 +111,14 @@
                         <div class="tab-pane fade show active" id="home" role="tabpanel">
                             <form id="commentForm" method="post" action="{{ route('comment') }}">
                                 @csrf
-                                <textarea type="text" name="body" class="form-control" data-bind="body" rows="4"></textarea>
+                                <textarea id="editor" data-preview="#previewComment" type="text" name="body" class="form-control" data-bind="body" rows="4"></textarea>
                                 <input type="hidden" name="ticket_id" value="{{ $ticket->id }}" />
                             </form>
                         </div>
                         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                             <div class="card">
-                                <div class="card-body">
-                                    <div class="dropzone">
-                                        <div class="info"></div>
-                                    </div>
+                                <div id="previewComment" class="card-body">
+
                                 </div>
                             </div>
                         </div>
@@ -144,6 +144,7 @@
                     </div>
                 </div>
             </div>
+            @endauth
         </div>
         <div class="col-md-3 order-md-2 mb-4">
             <ul class="list-group list-group-flush mb-3">
@@ -173,6 +174,24 @@
                                     <option value="{{ $user->id }}" {{ isset($ticket) && in_array($user->id, $ticket->users()->pluck('users.id')->toArray()) ? 'selected' : '' }}>
                                         {{ $user->name }}</option>
                                     @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <button type="submit" class="btn btn-outline-secondary">Ok</button>
+                            </div>
+                        </form>
+                    </div>
+                    @elseif (empty($ticket->owners) && count($ticket->users) == 0)
+                    <a type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="height: 25px;">
+                        <span class="text-muted">Edit</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                        <form class="px-3 py-2" method="post" action="{{route('assignee', $ticket->id)}}">
+                            @csrf
+                            <div class="form-group mb-1">
+                                <label for="assignee">Assign people to this issue</label>
+                                <select class="form-control custom-select" name="users" id="assignee">
+                                    <option value="{{ Auth::user()->id }}" }}>{{ Auth::user()->name }}</option>
                                 </select>
                             </div>
                             <div>
@@ -243,8 +262,8 @@
                         <form class="px-3 py-2" method="post" action="{{route('label', $ticket->id)}}">
                             @csrf
                             <div class="form-group mb-1">
-                                <label for="assignee">Assign people to this issue</label>
-                                <select multiple="multiple" class="form-control custom-select" name="labels[]" id="assignee">
+                                <label for="label">Assign people to this issue</label>
+                                <select multiple="multiple" class="form-control custom-select" name="labels[]" id="label">
                                     @foreach ($labels as $label)
                                     <option value="{{ $label->id }}" {{ isset($label) && in_array($label->id, $ticket->labels()->pluck('labels.id')->toArray()) ? 'selected' : '' }}>
                                         <div class="float-left color mr-2" style="margin-top: 2px; background-color: #d73a4a"></div>
@@ -266,7 +285,7 @@
                     <div>
                         <p class="my-0">Confidentiality</p>
                         <div>
-                            @if($ticket->confidentiality =='Not confidential')
+                            @if($ticket->confidentiality =='Public')
                             <svg class="mb-1" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-eye" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.134 13.134 0 0 0 1.66 2.043C4.12 11.332 5.88 12.5 8 12.5c2.12 0 3.879-1.168 5.168-2.457A13.134 13.134 0 0 0 14.828 8a13.133 13.133 0 0 0-1.66-2.043C11.879 4.668 10.119 3.5 8 3.5c-2.12 0-3.879 1.168-5.168 2.457A13.133 13.133 0 0 0 1.172 8z" />
                                 <path fill-rule="evenodd" d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z" />
@@ -290,8 +309,8 @@
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                         <form method="post" action="{{route('confidentiality', $ticket->id)}}">
                             @csrf
-                            <button class="dropdown-item {{ $ticket->confidentiality == 'Confidential' ? 'disabled' : '' }}" type="submit" name="submit" value="Confidential">Confidential</button>
-                            <button class="dropdown-item {{ $ticket->confidentiality == 'Not confidential' ? 'disabled' : '' }}" type="submit" name="submit" value="Not confidential">Not confidential</button>
+                            <button class="dropdown-item {{ $ticket->confidentiality == 'Private' ? 'disabled' : '' }}" type="submit" name="submit" value="Private">Private</button>
+                            <button class="dropdown-item {{ $ticket->confidentiality == 'Public' ? 'disabled' : '' }}" type="submit" name="submit" value="Public">Public</button>
                         </form>
                     </div>
                     @endif
@@ -322,7 +341,7 @@
                         <form method="post" action="{{route('lock', $ticket->id)}}">
                             @csrf
                             <button class="dropdown-item {{ $ticket->lock == 'Lock' ? 'disabled' : '' }}" type="submit" name="submit" value="Lock">Lock</button>
-                            <button class="dropdown-item {{ $ticket->lock == 'Unlock' ? 'disabled' : '' }}" type="submit" name="submit" value="Unlock">Not confidential</button>
+                            <button class="dropdown-item {{ $ticket->lock == 'Unlock' ? 'disabled' : '' }}" type="submit" name="submit" value="Unlock">Public</button>
                         </form>
                     </div>
                     @endif

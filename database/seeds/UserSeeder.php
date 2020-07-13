@@ -17,11 +17,11 @@ class UserSeeder extends Seeder
             'name' => 'Anonymous',
             'email' => 'anonymous@gmail.com',
             'password' => Hash::make('password'),
-            'avatar' => 'https://lh3.googleusercontent.com/ogw/ADGmqu_UggxPzsIdUygsoV0QrCr0-l2juCHaSDR7sTAe4Q=s83-c-mo',
+            'avatar' => 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png',
             'status' => '1',
             'role' => 'anonymous',
         ]);
 
-        factory(User::class, 50)->create();
+        // factory(User::class, 50)->create();
     }
 }

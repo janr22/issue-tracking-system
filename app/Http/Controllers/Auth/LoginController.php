@@ -7,6 +7,7 @@ use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Session;
 use App\User;
 
 class LoginController extends Controller
@@ -27,11 +28,10 @@ class LoginController extends Controller
             'name' => $user->name,
             'password' => Hash::make('password'),
             'avatar' => $user->avatar,
-            'status' => 0,
         ]);
-        if (Auth::attempt(['users.status' => 0, 'password' => 'password' ])) {
+        if (Auth::attempt(['password' => 'password', 'users.status' => 0])) {
             Auth::login($user, false);
-            return redirect('/');
+            return redirect()->intended(url('/'));
         } else {
             return redirect()->route('home')->with('status', 'Your account has been deactivated.');
         }

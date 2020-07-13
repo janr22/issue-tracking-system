@@ -22,7 +22,7 @@ class CreateTicketsTable extends Migration
             $table->string('status');
             $table->string('tracker');
             $table->string('priority');
-            $table->string('confidentiality')->default('Not confidential');
+            $table->string('confidentiality')->default('Public');
             $table->string('lock')->default('Unlock');
             $table->unsignedBigInteger('owner_id')->nullable();
             $table->foreign('owner_id')->references('id')->on('users');

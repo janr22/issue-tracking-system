@@ -10979,30 +10979,13 @@ input[disabled] {
   display: block;
 }
 
-.input,
-.textarea {
-  border: 1px solid #ccc;
-  font-family: inherit;
-  font-size: inherit;
-  padding: 1px 6px;
+tbody th,
+tbody td {
+  padding-bottom: 8px !important;
+  padding-top: 8px !important;
 }
 
-.input-wrap {
-  position: relative;
-}
-
-.input-wrap .input {
-  position: absolute;
-  width: 100%;
-  left: 0;
-}
-
-.width-plus {
-  padding: 0 1rem;
-}
-
-.table-striped > tbody > tr:nth-child(2n+1) > td,
-.table-striped > tbody > tr:nth-child(2n+1) > th {
-  background-color: #f6f7f8;
+.pagination {
+  margin-bottom: 0px;
 }
 

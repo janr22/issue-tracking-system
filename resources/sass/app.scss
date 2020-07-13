@@ -26,11 +26,11 @@ $info: #c0d3eb;
 }
 
 .IssueLabel.sidebar-labels-style {
-  display: inline-block!important;
-  width: -webkit-min-content!important;
-  width: -moz-min-content!important;
-  width: min-content!important;
-  margin: 2px 2px 2px 0
+  display: inline-block !important;
+  width: -webkit-min-content !important;
+  width: -moz-min-content !important;
+  width: min-content !important;
+  margin: 2px 2px 2px 0;
 }
 
 .container-xl {
@@ -62,29 +62,14 @@ input[disabled] {
 .readOnly .editButton {
   display: block;
 }
-//input
-
-.input,
-.textarea {
-  border: 1px solid #ccc;
-  font-family: inherit;
-  font-size: inherit;
-  padding: 1px 6px;
-}
-
-.input-wrap {
-  position: relative;
-}
-.input-wrap .input {
-  position: absolute;
-  width: 100%;
-  left: 0;
-}
-.width-plus {
-  padding: 0 1rem;
-}
 
 //table
-.table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
-  background-color: #f6f7f8;
+
+tbody th,
+tbody td {
+  padding-bottom: 8px !important;
+  padding-top: 8px !important;
+}
+.pagination {
+  margin-bottom: 0px;
 }

@@ -23,6 +23,13 @@
                         <path d="M9.665,485.9c1.2,0.6,779.3,156.699,780.6,156.699c6.801-0.3,13.4-4.5,14.7-11.1l4.2-21c1.3-6.7-3.1-13.1-9.3-16   c-20.8-9.8-33.101-32.8-28.4-56.4c4.7-23.6,25-40.1,48-41.1c6.8-0.3,13.4-4.5,14.7-11.1l3.1-15.4l1.101-5.7   c1.3-6.7-3.101-13.1-9.3-16c-20.801-9.8-33.101-32.8-28.4-56.399c4.7-23.601,25-40.101,48-41.101c6.8-0.3,13.4-4.5,14.7-11.1   l4.2-21c1.3-6.7-3.101-13.1-9.301-16c-20.8-9.8-33.1-32.8-28.399-56.4c4.7-23.6,25-40.1,48-41.1c6.8-0.3,13.399-4.5,14.7-11.1   l4.699-23.3c1.301-6.7-3-13.2-9.699-14.5c0,0-781.9-156.8-782.7-156.8c-5.8,0-10.9,4.1-12.1,9.9l-4.7,23.3   c-1.3,6.7,3.1,13.1,9.3,16c20.8,9.8,33.1,32.8,28.4,56.4c-4.7,23.6-25,40.1-48,41.1c-6.801,0.3-13.4,4.5-14.7,11.1l-4.2,21   c-1.3,6.7,3.1,13.1,9.3,16c20.8,9.8,33.101,32.8,28.4,56.4c-4.7,23.6-25,40.1-48,41.1c-6.8,0.3-13.4,4.5-14.7,11.1l-4.2,21   c-1.3,6.7,3.101,13.1,9.3,16c20.801,9.8,33.101,32.8,28.4,56.4c-4.7,23.601-25,40.101-48,41.101c-6.8,0.3-13.4,4.5-14.7,11.1   l-4.2,21C-0.935,476.7,3.464,483,9.665,485.9z M676.165,229.6c2.7-13.5,15.9-22.3,29.4-19.6s22.3,15.9,19.6,29.4l-33,164.2   l-20.3,101.2c-2.4,11.9-12.8,20.101-24.5,20.101c-1.601,0-3.3-0.2-4.9-0.5c-13.5-2.7-22.3-15.9-19.6-29.4l22.7-112.9L676.165,229.6   z M225.365,139.1c2.7-13.5,15.9-22.3,29.4-19.6s22.3,15.9,19.6,29.4l-11.4,56.7l-12.899,64.3l-10.4,51.8l-18.5,92.6   c-2.399,11.9-12.8,20.101-24.5,20.101c-1.6,0-3.3-0.2-4.899-0.5c-0.7-0.101-1.4-0.301-2-0.5c-12.4-3.601-20.101-16.101-17.5-28.9   l3.699-18.7l9.7-48.4L225.365,139.1z" data-original="#000000" class="active-path" data-old_color="#000000" fill="#FFFFFF" />
                     </svg>
                     Ticket
+                    @auth
+                    @if(Auth::user()->role == 'admin')
+                    Admin
+                    @elseif (Auth::user()->role == 'moderator')
+                    Moderator
+                    @endif
+                    @endauth
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -48,8 +55,12 @@
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                 <h2 class="dropdown-header">{{ Auth::user()->name }}</h2>
+                                <a class="dropdown-item" href=" {{url('/usertickets') }}">View my tickets</a>
+                                @if(Auth::user()->role == 'admin' || Auth::user()->role == 'moderator')
+                                <a class="dropdown-item" href=" {{url('/privatetickets') }}">Private tickets</a>
+                                @endif
                                 @if(Auth::user()->role == 'admin')
-                                <a class="dropdown-item" href="{{ url('/users') }}">Manage Users</a>
+                                <a class="dropdown-item" href="{{ url('/users') }}">Manage users</a>
                                 @endif
                                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -86,72 +97,58 @@
             $(".alert").alert('close');
         }, 3000);
         $('.toast').toast('show');
-        // popovers
-        $('#popover-content').hide();
-        $('#popover-button').popover({
-            content: $('#popover-content'),
-            placement: 'bottom',
-            html: true
-        });
-        $('#popover-button').popover('show');
-        $('#popover-button').popover('hide');
-        $('#popover-content').show();
-    });
-
-    // prevent hold ctrl to select
-    $('option').mousedown(function(e) {
-        e.preventDefault();
-        var originalScrollTop = $(this).parent().scrollTop();
-        console.log(originalScrollTop);
-        $(this).prop('selected', $(this).prop('selected') ? false : true);
-        var self = this;
-        $(this).parent().focus();
-        setTimeout(function() {
-            $(self).parent().scrollTop(originalScrollTop);
-        }, 0);
-        return false;
-    });
-    // prevent dropdown menu to autoclose when click
-    $('.dropdown-menu').on('click', function(e) {
-        $(this).next('.dropdown-menu').toggle();
-        e.stopPropagation();
-    });
-    //edit subject input
-    $(document)
-        .on("click", ".editButton", function() {
-            var section = $(this).closest(".formSection");
-            var otherSections = $(".formSection").not(section);
-            var inputs = section.find("input");
-            section.removeClass("readOnly");
-            otherSections.addClass("disabled").find('button').prop("disabled", true);
-            oldValues = {};
-            inputs.each(function() {
-                    oldValues[this.id] = $(this).val();
-                })
-                .prop("disabled", false);
-        })
-        .on("click", ".cancelButton", function(e) {
-            var section = $(this).closest(".formSection");
-            var otherSections = $(".formSection").not(section);
-            var inputs = section.find("input");
-            section.addClass("readOnly");
-            otherSections.removeClass("disabled");
-            $('button').prop("disabled", false);
-            inputs.each(function() {
-                    $(this).val(oldValues[this.id]);
-                })
-                .prop("disabled", true)
+        // prevent dropdown menu to autoclose when click
+        $('.dropdown-menu').on('click', function(e) {
+            $(this).next('.dropdown-menu').toggle();
             e.stopPropagation();
+        });
+        // disabled select
+        $('form').submit(function() {
+            $('[disabled]').removeAttr('disabled');
+        })
+
+        // prevent hold ctrl to select
+        $('option').mousedown(function(e) {
             e.preventDefault();
+            var originalScrollTop = $(this).parent().scrollTop();
+            console.log(originalScrollTop);
+            $(this).prop('selected', $(this).prop('selected') ? false : true);
+            var self = this;
+            $(this).parent().focus();
+            setTimeout(function() {
+                $(self).parent().scrollTop(originalScrollTop);
+            }, 0);
+            return false;
         });
 
-    // Dealing with Input width
-    let el = document.querySelector(".input-wrap .input");
-    let widthMachine = document.querySelector(".input-wrap .width-plus");
-    // disabled select
-    $('form').submit(function() {
-        $('[disabled]').removeAttr('disabled');
-    })
+        //edit subject input
+        $(document).on("click", ".editButton", function() {
+                var section = $(this).closest(".formSection");
+                var otherSections = $(".formSection").not(section);
+                var inputs = section.find("input");
+                section.removeClass("readOnly");
+                otherSections.addClass("disabled").find('button').prop("disabled", true);
+                oldValues = {};
+                inputs.each(function() {
+                        oldValues[this.id] = $(this).val();
+                    })
+                    .prop("disabled", false);
+            })
+            .on("click", ".cancelButton", function(e) {
+                var section = $(this).closest(".formSection");
+                var otherSections = $(".formSection").not(section);
+                var inputs = section.find("input");
+                section.addClass("readOnly");
+                otherSections.removeClass("disabled");
+                $('button').prop("disabled", false);
+                inputs.each(function() {
+                        $(this).val(oldValues[this.id]);
+                    })
+                    .prop("disabled", true)
+                e.stopPropagation();
+                e.preventDefault();
+            });
+    });
 </script>
 
 </html>

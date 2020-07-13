@@ -10,12 +10,9 @@
                 @auth
                 <input type="hidden" name="owner_id" value="{{ Auth::user()->id }}" />
                 @endauth
-                @guest
-                <input type="hidden" name="owner_id" value="1" />
-                @endguest
                 <div class="mb-3">
                     <label for="project">Project</label>
-                    <select class="custom-select d-block w-100" name="project" required>
+                    <select class="custom-select d-block w-100" value="{{  old('project') }}" name="project" required>
                         <option value=""></option>
                         <option>Loop (core)</option>
                         <option>Loop IM</option>
@@ -25,7 +22,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="tracker">Tracker</label>
-                    <select class="custom-select d-block w-100" name="tracker" required>
+                    <select class="custom-select d-block w-100" value="{{  old('tracker') }}" name="tracker" required>
                         <option value=""></option>
                         <option>Bug</option>
                         <option>Feature</option>
@@ -33,21 +30,21 @@
                 </div>
                 <div class="mb-3">
                     <label for="subject">Subject</label>
-                    <input type="text" class="form-control" name="subject" required>
+                    <input type="text" class="form-control" name="subject" value="{{  old('subject') }}" required>
                 </div>
                 @guest
                 <div class="mb-3">
                     <label for="email">Email</label>
-                    <input type="email" class="form-control" name="email" required>
+                    <input type="email" class="form-control" name="email" value="{{  old('email') }}" required>
                 </div>
                 @endguest
                 <div class="mb-3">
                     <label for="description">Description</label>
-                    <textarea class="form-control" rows="5" name="description" required></textarea>
+                    <textarea id="editor" data-preview="#previewTicket" class="form-control" rows="5" name="description" required>{{ old('description') }}</textarea>
                 </div>
                 <div class="mb-3">
                     <label for="status">Status</label>
-                    <select class="custom-select d-block w-100" @guest disabled @endguest name="status" required>
+                    <select class="custom-select d-block w-100" @guest disabled @endguest name="status" value="{{  old('status') }}" required>
                         <option>New</option>
                         <option>Closed</option>
                         <option>Assigned</option>
@@ -57,7 +54,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="priority">Priority</label>
-                    <select class="custom-select d-block w-100" @guest disabled @endguest name="priority" required>
+                    <select class="custom-select d-block w-100" @guest disabled @endguest name="priority" value="{{  old('priority') }}" required>
                         <option selected>Normal</option>
                         <option>Low</option>
                         <option>High</option>
@@ -74,10 +71,25 @@
                 </div>
                 @endguest
                 <hr class="mb-4">
-                <button type="submit" class="btn btn-outline-secondary">Create</button>
-                <button type="button" class="btn btn-outline-secondary">Preview</button>
+                <button type="submit" class="btn btn-success">Create</button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#descriptionModal">
+                    Preview
+                </button>
             </form>
-
+            <div class="modal fade" id="descriptionModal" tabindex="-1" role="dialog" aria-labelledby="descriptionModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header py-2">
+                            <h5 class="modal-title" id="descriptionModalLabel">Description</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div id="previewTicket" class="card-body">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

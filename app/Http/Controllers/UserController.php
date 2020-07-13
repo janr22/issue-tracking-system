@@ -9,12 +9,12 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::whereIn('role', ['user', 'moderator'])->paginate(10);;
+        $users = User::whereIn('role', ['user', 'moderator'])->paginate(5);;
         return view('pages.users', compact('users'));
     }
     public function status(Request $request, $id)
     {
-        $user = User::find($id);
+        $user = User::findOrFail($id);
         $user->update(['status' => $request->status]);
         return redirect()->back();
     }

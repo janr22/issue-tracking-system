@@ -14,8 +14,20 @@ class TicketController extends Controller
 {
     public function index()
     {
-        $tickets = Ticket::with('users')->paginate(10);
+        $tickets = Ticket::with('users')->where('confidentiality', 'Public')->paginate(5);
         return view('pages.home', compact('tickets'));
+    }
+
+    public function userTicket(Request $request)
+    {
+        $tickets = $request->user()->owns()->paginate(5);
+        return view('pages.user_ticket', compact('tickets'));
+    }
+
+    public function privateTicket(Request $request)
+    {
+        $tickets = Ticket::with('users')->where('confidentiality', 'Private')->paginate(5);
+        return view('pages.private_ticket', compact('tickets'));
     }
 
     public function create()
@@ -42,17 +54,19 @@ class TicketController extends Controller
                 'status' => $request->get('status'),
                 'tracker' => $request->get('tracker'),
                 'priority' => $request->get('priority'),
-                'owner_id' => $request->get('owner_id'),
+                'owner_id' => 1,
             ]);
             $ticket->save();
-            return redirect('/');
+            return redirect('/' . $ticket->id);
         }
     }
 
     public function show($id)
     {
-        $ticket = Ticket::with('users.comments', 'labels', 'owner')->where('tickets.id', $id)->first();
-        $users = User::all();
+        $ticket = Ticket::with('users.comments', 'labels', 'owner')
+            ->where('tickets.id', $id)
+            ->first();
+        $users = User::where('users.id', '!=' , 1)->get();
         $labels = Label::all();
         return view('pages.show_ticket', compact(['ticket', 'users', 'labels']));
     }
@@ -109,5 +123,4 @@ class TicketController extends Controller
         $ticket->labels()->sync($request->labels);
         return redirect()->back();
     }
-
 }
